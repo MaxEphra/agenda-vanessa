@@ -46,7 +46,10 @@
         <div id="admin-panel" class="admin-panel">
             <div class="flex">
                 <h2>Horários da Agenda</h2>
-                <button class="btn btn-success" onclick="mostrarFormAdicionar()">+ Novo Horário</button>
+                <div>
+                    <button class="btn btn-secondary" onclick="logout()">Sair</button>
+                    <button class="btn btn-success" onclick="mostrarFormAdicionar()">+ Novo Horário</button>
+                </div>
             </div>
             <div id="form-adicionar" style="display: none;" class="card">
                 <h3>Adicionar Horário</h3>
@@ -72,7 +75,7 @@
     const SUPABASE_ANON_KEY = "sb_publishable_LPUpHw5cVFZ_D5kysEivjw_egY3Cc3z";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
-    // ================= AUTENTICAÇÃO VIA TABELA ADMIN =================
+    // ================= AUTENTICAÇÃO =================
     async function login() {
         const senha = document.getElementById('senha').value.trim();
         if (!senha) {
@@ -81,7 +84,6 @@
         }
 
         try {
-            // Busca a senha (case-insensitive)
             const { data, error } = await supabaseClient
                 .from('admin')
                 .select('senha')
@@ -107,6 +109,12 @@
         }
     }
     
+    function logout() {
+        document.getElementById('admin-panel').style.display = 'none';
+        document.getElementById('login').style.display = 'block';
+        document.getElementById('senha').value = ''; // limpa o campo
+    }
+    
     // ================= CRUD DA AGENDA =================
     async function carregarHorarios() {
         const { data, error } = await supabaseClient
@@ -123,7 +131,6 @@
     }
     
     function renderizarTabela(horarios) {
-        // CORREÇÃO: a string começa com '<table>' em vez de '能able'
         let html = '<table><thead><tr><th>ID</th><th>Dia</th><th>Data</th><th>Horário</th><th>Disponível</th><th>Ações</th></tr></thead><tbody>';
         horarios.forEach(h => {
             html += `<tr>
