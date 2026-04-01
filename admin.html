@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Gerenciar Agenda</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #f5f5f5; padding: 2rem; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden; }
+        header { background: linear-gradient(to right, #d81b60, #f48fb1); color: white; padding: 1.5rem; text-align: center; }
+        header h1 { margin-bottom: 0.5rem; }
+        .content { padding: 2rem; }
+        .login-box { max-width: 400px; margin: 2rem auto; text-align: center; }
+        .login-box input { width: 100%; padding: 0.8rem; margin: 0.5rem 0; border: 1px solid #ddd; border-radius: 8px; }
+        .login-box button { width: 100%; padding: 0.8rem; background: #d81b60; color: white; border: none; border-radius: 8px; cursor: pointer; }
+        .admin-panel { display: none; }
+        .btn { background: #d81b60; color: white; border: none; padding: 0.6rem 1rem; border-radius: 8px; cursor: pointer; margin: 0.5rem 0; }
+        .btn-secondary { background: #6c757d; }
+        .btn-success { background: #2e7d32; }
+        .btn-danger { background: #c62828; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #fce4ec; color: #d81b60; }
+        .form-group { margin: 1rem 0; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+        .form-group input, .form-group select { width: 100%; padding: 0.6rem; border: 1px solid #ccc; border-radius: 8px; }
+        .flex { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: space-between; align-items: center; }
+        .card { background: #fff; border-radius: 12px; padding: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 1rem; }
+        @media (max-width: 768px) { body { padding: 1rem; } .content { padding: 1rem; } table, thead, tbody, th, td, tr { display: block; } th { display: none; } td { border-bottom: 1px solid #eee; position: relative; padding-left: 50%; } td:before { content: attr(data-label); position: absolute; left: 6px; width: 45%; font-weight: bold; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Painel de Controle - Agenda</h1>
+        <p>Gerencie os horários disponíveis</p>
+    </header>
+    <div class="content">
+        <div id="login" class="login-box">
+            <h2>Autenticação</h2>
+            <input type="password" id="senha" placeholder="Digite a senha de acesso">
+            <button onclick="login()">Entrar</button>
+        </div>
+        <div id="admin-panel" class="admin-panel">
+            <div class="flex">
+                <h2>Horários da Agenda</h2>
+                <button class="btn btn-success" onclick="mostrarFormAdicionar()">+ Novo Horário</button>
+            </div>
+            <div id="form-adicionar" style="display: none;" class="card">
+                <h3>Adicionar Horário</h3>
+                <div class="form-group">
+                    <label>Dia da semana</label>
+                    <select id="novo-dia"><option>Segunda-feira</option><option>Terça-feira</option><option>Quarta-feira</option><option>Quinta-feira</option><option>Sexta-feira</option><option>Sábado</option><option>Domingo</option></select>
+                </div>
+                <div class="form-group"><label>Data (DD/MM)</label><input type="text" id="nova-data" placeholder="Ex: 14/02"></div>
+                <div class="form-group"><label>Horário (HH:MM)</label><input type="text" id="novo-horario" placeholder="Ex: 18:00"></div>
+                <div class="form-group"><label>Disponível</label><select id="novo-disponivel"><option value="true">Sim</option><option value="false">Não</option></select></div>
+                <button class="btn" onclick="adicionarHorario()">Salvar</button>
+                <button class="btn btn-secondary" onclick="fecharForm()">Cancelar</button>
+            </div>
+            <div id="lista-horarios"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    // ================= CONFIGURAÇÃO SUPABASE =================
+    const SUPABASE_URL = "https://syyypnufmyiyellylpqb.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_LPUpHw5cVFZ_D5kysEivjw_egY3Cc3z";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    // ================= AUTENTICAÇÃO VIA TABELA ADMIN =================
+    async function login() {
+        const senha = document.getElementById('senha').value.trim();
+        if (!senha) {
+            alert("Digite a senha.");
+            return;
+        }
+
+        try {
+            // Busca a senha (case-insensitive)
+            const { data, error } = await supabaseClient
+                .from('admin')
+                .select('senha')
+                .eq('senha', senha)
+                .maybeSingle();
+
+            if (error) {
+                console.error("Erro na consulta:", error);
+                alert("Erro ao verificar senha: " + error.message);
+                return;
+            }
+
+            if (data) {
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                carregarHorarios();
+            } else {
+                alert("Senha incorreta!");
+            }
+        } catch (err) {
+            console.error("Erro inesperado:", err);
+            alert("Erro ao conectar com o banco de dados.");
+        }
+    }
+    
+    // ================= CRUD DA AGENDA =================
+    async function carregarHorarios() {
+        const { data, error } = await supabaseClient
+            .from('agenda')
+            .select('*')
+            .order('data', { ascending: true })
+            .order('horario', { ascending: true });
+        if (error) {
+            console.error(error);
+            document.getElementById('lista-horarios').innerHTML = "<p>Erro ao carregar dados.</p>";
+            return;
+        }
+        renderizarTabela(data);
+    }
+    
+    function renderizarTabela(horarios) {
+        // CORREÇÃO: a string começa com '<table>' em vez de '能able'
+        let html = '<table><thead><tr><th>ID</th><th>Dia</th><th>Data</th><th>Horário</th><th>Disponível</th><th>Ações</th></tr></thead><tbody>';
+        horarios.forEach(h => {
+            html += `<tr>
+                        <td data-label="ID">${h.id}</td>
+                        <td data-label="Dia">${h.dia}</td>
+                        <td data-label="Data">${h.data}</td>
+                        <td data-label="Horário">${h.horario}</td>
+                        <td data-label="Disponível">${h.disponivel ? 'Sim' : 'Não'}</td>
+                        <td data-label="Ações">
+                            <button class="btn btn-secondary" onclick="editarHorario(${h.id}, '${h.dia}', '${h.data}', '${h.horario}', ${h.disponivel})">Editar</button>
+                            <button class="btn btn-danger" onclick="excluirHorario(${h.id})">Excluir</button>
+                        </td>
+                     </tr>`;
+        });
+        html += '</tbody></table>';
+        document.getElementById('lista-horarios').innerHTML = html;
+    }
+    
+    function mostrarFormAdicionar() {
+        document.getElementById('form-adicionar').style.display = 'block';
+        document.getElementById('novo-dia').value = '';
+        document.getElementById('nova-data').value = '';
+        document.getElementById('novo-horario').value = '';
+        document.getElementById('novo-disponivel').value = 'true';
+    }
+    
+    function fecharForm() {
+        document.getElementById('form-adicionar').style.display = 'none';
+    }
+    
+    async function adicionarHorario() {
+        const dia = document.getElementById('novo-dia').value;
+        const data = document.getElementById('nova-data').value.trim();
+        const horario = document.getElementById('novo-horario').value.trim();
+        const disponivel = document.getElementById('novo-disponivel').value === 'true';
+        if (!dia || !data || !horario) {
+            alert("Preencha todos os campos!");
+            return;
+        }
+        const { error } = await supabaseClient.from('agenda').insert([{ dia, data, horario, disponivel }]);
+        if (error) {
+            alert("Erro ao adicionar: " + error.message);
+        } else {
+            alert("Horário adicionado com sucesso!");
+            fecharForm();
+            carregarHorarios();
+        }
+    }
+    
+    async function editarHorario(id, diaAtual, dataAtual, horarioAtual, disponivelAtual) {
+        const novodia = prompt("Novo dia da semana:", diaAtual);
+        if (novodia === null) return;
+        const novadata = prompt("Nova data (DD/MM):", dataAtual);
+        if (novadata === null) return;
+        const novohorario = prompt("Novo horário (HH:MM):", horarioAtual);
+        if (novohorario === null) return;
+        const novodisponivel = confirm("Disponível? (OK = Sim, Cancelar = Não)");
+        const { error } = await supabaseClient.from('agenda').update({
+            dia: novodia,
+            data: novadata,
+            horario: novohorario,
+            disponivel: novodisponivel
+        }).eq('id', id);
+        if (error) alert("Erro ao editar: " + error.message);
+        else {
+            alert("Horário atualizado!");
+            carregarHorarios();
+        }
+    }
+    
+    async function excluirHorario(id) {
+        if (confirm("Tem certeza que deseja excluir este horário?")) {
+            const { error } = await supabaseClient.from('agenda').delete().eq('id', id);
+            if (error) alert("Erro ao excluir: " + error.message);
+            else {
+                alert("Horário excluído!");
+                carregarHorarios();
+            }
+        }
+    }
+</script>
+</body>
+</html>

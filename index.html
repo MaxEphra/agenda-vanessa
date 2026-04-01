@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda Vanessa Moreira - Manicure & Pedicure</title>
+    
+    <!-- Meta tags para compartilhamento (Open Graph) -->
+    <meta property="og:title" content="Vanessa Moreira - Manicure & Pedicure">
+    <meta property="og:description" content="Agende seu horário para manicure e pedicure com Vanessa Moreira. Profissionalismo e beleza para suas mãos e pés.">
+    <meta property="og:image" content="./vane.jpeg">
+    <meta property="og:image:width" content="800">
+    <meta property="og:image:height" content="800">
+    <meta property="og:url" content="https://maxephra.github.io/agenda-vanessa">
+    <meta property="og:type" content="website">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --rosa-claro: #fce4ec;
+            --rosa-medio: #f48fb1;
+            --rosa-escuro: #d81b60;
+            --rosa-suave: #ffebee;
+            --cinza-claro: #f5f5f5;
+            --cinza-texto: #555;
+            --branco: #ffffff;
+            --sombra: rgba(0, 0, 0, 0.08);
+            --verde-pix: #2e7d32;
+            --vermelho-cartao: #c62828;
+        }
+
+        body {
+            background-color: var(--rosa-suave);
+            color: var(--cinza-texto);
+            line-height: 1.6;
+            padding-bottom: 80px;
+        }
+
+        /* Header com imagem circular */
+        header {
+            background: linear-gradient(to right, var(--rosa-escuro), var(--rosa-medio));
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem 1.5rem;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 12px var(--sombra);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1rem;
+            height: 120px;
+        }
+
+        .profile-img {
+            width: 100px !important;
+            height: 100px !important;
+            border-radius: 50% !important;
+            object-fit: cover !important;
+            border: 3px solid white !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+            display: block !important;
+            margin: 0 auto !important;
+            max-width: 100% !important;
+            max-height: 100% !important;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--branco);
+            border-radius: 16px;
+            padding: 1.8rem;
+            margin: 1.5rem auto;
+            box-shadow: 0 6px 15px var(--sombra);
+            max-width: 900px;
+            width: 90%;
+            border-top: 5px solid var(--rosa-medio);
+        }
+
+        h2 {
+            color: var(--rosa-escuro);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--rosa-claro);
+            font-size: 1.8rem;
+        }
+
+        /* Tabela de serviços */
+        .servicos-tabela {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .servicos-tabela th,
+        .servicos-tabela td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--rosa-claro);
+        }
+
+        .servicos-tabela th {
+            background-color: var(--rosa-claro);
+            color: var(--rosa-escuro);
+            font-weight: 600;
+        }
+
+        .servicos-tabela td:first-child {
+            font-weight: 600;
+            color: var(--rosa-escuro);
+        }
+
+        .preco-pix {
+            color: var(--verde-pix);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .preco-cartao {
+            color: var(--vermelho-cartao);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* Formulário de agendamento */
+        label {
+            display: block;
+            margin: 1rem 0 0.5rem;
+            color: var(--rosa-escuro);
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.9rem;
+            border: 2px solid var(--rosa-claro);
+            border-radius: 10px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: border 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--rosa-medio);
+        }
+
+        button {
+            background: linear-gradient(to right, var(--rosa-escuro), var(--rosa-medio));
+            color: white;
+            border: none;
+            padding: 1rem 1.8rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 12px rgba(216, 27, 96, 0.3);
+        }
+
+        /* Mensagem de confirmação */
+        #msg {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+        }
+
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+
+        /* Horários */
+        .horario-info {
+            background-color: var(--rosa-claro);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+            border-left: 4px solid var(--rosa-medio);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .horario-info h3 {
+            color: var(--rosa-escuro);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            text-align: center;
+            border-bottom: 2px dashed var(--rosa-medio);
+            padding-bottom: 0.5rem;
+        }
+
+        .dia-grupo {
+            margin-bottom: 1.8rem;
+            background-color: white;
+            padding: 1.2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .dia-grupo:last-child {
+            margin-bottom: 0;
+        }
+
+        .dia-grupo h4 {
+            color: var(--rosa-escuro);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .horarios-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            justify-content: center;
+            padding: 0.5rem;
+        }
+
+        .hora-btn {
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 70px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: inline-block;
+            margin: 2px;
+            pointer-events: auto;
+        }
+
+        .hora-btn.disponivel {
+            background: linear-gradient(to right, var(--rosa-escuro), var(--rosa-medio));
+            color: white !important;
+        }
+
+        .hora-btn.disponivel:hover {
+            background: linear-gradient(to right, #c2185b, #e91e63);
+            transform: translateY(-2px);
+        }
+
+        .hora-btn.bloqueado {
+            background: linear-gradient(to right, #f8bbd9, #f8bbd9);
+            color: #9e9e9e !important;
+            cursor: not-allowed;
+            opacity: 0.7;
+            text-decoration: line-through;
+        }
+
+        .hora-btn.selecionado {
+            background: linear-gradient(to right, #880e4f, #ad1457);
+            color: white !important;
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(136, 14, 79, 0.5);
+        }
+
+        /* Botões de serviço */
+        .servicos-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin: 1.5rem 0;
+        }
+
+        .servico-btn {
+            padding: 1rem;
+            border: 2px solid var(--rosa-claro);
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            background-color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .servico-btn:hover {
+            border-color: var(--rosa-medio);
+            background-color: var(--rosa-claro);
+        }
+
+        .servico-btn.selecionado {
+            background: linear-gradient(to right, var(--rosa-escuro), var(--rosa-medio));
+            color: white !important;
+            border-color: var(--rosa-escuro);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(216, 27, 96, 0.2);
+        }
+
+        .servico-preco {
+            background-color: var(--rosa-claro);
+            color: var(--rosa-escuro);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .servico-btn.selecionado .servico-preco {
+            background-color: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        /* Informação de seleção */
+        .selection-info {
+            background-color: #e3f2fd;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            text-align: center;
+            border: 1px solid #bbdefb;
+            display: none;
+        }
+
+        .selection-info span {
+            font-weight: bold;
+            color: #1976d2;
+        }
+
+        /* Rodapé fixo estilo app */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            border-top: 1px solid var(--rosa-claro);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--cinza-texto);
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            flex: 1;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .nav-item i {
+            font-size: 1.6rem;
+            margin-bottom: 4px;
+        }
+
+        .nav-item span {
+            font-size: 0.7rem;
+        }
+
+        .nav-item:hover {
+            color: var(--rosa-escuro);
+            transform: translateY(-2px);
+        }
+
+        /* Modal PIX */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 1.5rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            text-align: center;
+            animation: fadeInUp 0.3s ease;
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #aaa;
+        }
+        .close-modal:hover {
+            color: var(--rosa-escuro);
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-content img {
+            max-width: 200px;
+            border-radius: 10px;
+            margin: 1rem auto;
+            display: block;
+            border: 1px solid #ddd;
+        }
+        .modal-content input {
+            background-color: var(--cinza-claro);
+            font-family: monospace;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 0;
+        }
+        .modal-content button {
+            margin-top: 1rem;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .profile-img {
+                width: 90px !important;
+                height: 90px !important;
+            }
+            .profile-container {
+                height: 110px;
+            }
+            .card {
+                width: 95%;
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 1.6rem;
+            }
+            .nav-item i {
+                font-size: 1.4rem;
+            }
+            .nav-item span {
+                font-size: 0.65rem;
+            }
+            .horarios-container {
+                gap: 0.6rem;
+            }
+            .hora-btn {
+                padding: 0.5rem 0.8rem;
+                min-width: 65px;
+                font-size: 0.85rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .profile-img {
+                width: 80px !important;
+                height: 80px !important;
+            }
+            .profile-container {
+                height: 100px;
+            }
+            .horarios-container {
+                gap: 0.5rem;
+            }
+            .hora-btn {
+                padding: 0.4rem 0.7rem;
+                min-width: 60px;
+                font-size: 0.8rem;
+            }
+            .modal-content {
+                margin: 20% auto;
+                width: 95%;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="profile-container">
+            <img src="./vane.jpeg" alt="Foto da Manicure Vanessa Moreira" class="profile-img">
+        </div>
+        <h1>Vanessa Moreira</h1>
+        <p>Beleza e profissionalismo para suas mãos e pés</p>
+    </header>
+
+    <!-- Seção de Serviços com valores PIX e Cartão -->
+    <section class="card">
+        <h2>Nossos Serviços</h2>
+        <table class="servicos-tabela">
+            <thead>
+                <th>Serviço</th>
+                    <th>PIX (à vista)</th>
+                    <th>Cartão (acréscimo)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Manicure Simples</td><td class="preco-pix">R$ 35,00</td><td class="preco-cartao">R$ 40,00</td></tr>
+                <tr><td>Manicure com Francesinha</td><td class="preco-pix">R$ 40,00</td><td class="preco-cartao">R$ 45,00</td></tr>
+                <tr><td>Pedicure Simples</td><td class="preco-pix">R$ 40,00</td><td class="preco-cartao">R$ 45,00</td></tr>
+                <tr><td>Pedicure com Francesinha</td><td class="preco-pix">R$ 45,00</td><td class="preco-cartao">R$ 50,00</td></tr>
+                <tr><td>Pacote Mão e Pé Simples</td><td class="preco-pix">R$ 70,00</td><td class="preco-cartao">R$ 75,00</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Seção de Agendamento (dinâmica via Supabase) -->
+    <section class="card">
+        <h2>Agendamento</h2>
+        
+        <div class="selection-info" id="selectionInfo">
+            <p>Seleção atual: <span id="selectedInfoText">Nenhum horário e serviço selecionado</span></p>
+        </div>
+        
+        <input type="hidden" id="selectedDay" value="">
+        <input type="hidden" id="selectedHour" value="">
+        <input type="hidden" id="selectedService" value="">
+        <input type="hidden" id="selectedPreco" value="">
+        
+        <div class="horario-info">
+            <h3>Selecione: DIA | HORÁRIO | SERVIÇO</h3>
+            <div id="horarios-dinamicos"></div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <h3 style="color: var(--rosa-escuro); margin-bottom: 1rem; text-align: center;">Escolha o Serviço</h3>
+            <div class="servicos-container">
+                <button class="servico-btn" data-servico="Manicure Simples" data-preco-pix="R$ 35,00" data-preco-cartao="R$ 40,00">
+                    <span>Manicure Simples</span>
+                    <span class="servico-preco">R$ 35,00 / R$ 40,00</span>
+                </button>
+                <button class="servico-btn" data-servico="Manicure com Francesinha" data-preco-pix="R$ 40,00" data-preco-cartao="R$ 45,00">
+                    <span>Manicure com Francesinha</span>
+                    <span class="servico-preco">R$ 40,00 / R$ 45,00</span>
+                </button>
+                <button class="servico-btn" data-servico="Pedicure Simples" data-preco-pix="R$ 40,00" data-preco-cartao="R$ 45,00">
+                    <span>Pedicure Simples</span>
+                    <span class="servico-preco">R$ 40,00 / R$ 45,00</span>
+                </button>
+                <button class="servico-btn" data-servico="Pedicure com Francesinha" data-preco-pix="R$ 45,00" data-preco-cartao="R$ 50,00">
+                    <span>Pedicure com Francesinha</span>
+                    <span class="servico-preco">R$ 45,00 / R$ 50,00</span>
+                </button>
+                <button class="servico-btn" data-servico="Pacote Mão e Pé Simples" data-preco-pix="R$ 70,00" data-preco-cartao="R$ 75,00">
+                    <span>Pacote Mão e Pé Simples</span>
+                    <span class="servico-preco">R$ 70,00 / R$ 75,00</span>
+                </button>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <h3 style="color: var(--rosa-escuro); margin-bottom: 1rem; text-align: center;">Seus Dados</h3>
+            <label for="name">Seu Nome</label>
+            <input type="text" id="name" placeholder="Digite seu nome completo">
+            <label for="phone">Seu Telefone para Contato</label>
+            <input type="tel" id="phone" placeholder="(11) 99999-9999">
+        </div>
+
+        <button onclick="agendar()">Confirmar Agendamento</button>
+        <p id="msg"></p>
+    </section>
+
+    <!-- Rodapé fixo estilo app -->
+    <div class="bottom-nav">
+        <div class="nav-item" id="btn-pix" onclick="abrirModal()">
+            <i class="fas fa-qrcode"></i>
+            <span>PIX</span>
+        </div>
+        <a href="https://link.mercadopago.com.br/agendavanemanicure" class="nav-item" target="_blank">
+            <i class="fas fa-credit-card"></i>
+            <span>Cartão</span>
+        </a>
+        <a href="https://wa.me/5511993909244?text=Olá!%20Gostaria%20de%20agendar%20um%20horário%20para%20manicure/pedicure" class="nav-item" target="_blank">
+            <i class="fab fa-whatsapp"></i>
+            <span>WhatsApp</span>
+        </a>
+    </div>
+
+    <!-- Modal PIX -->
+    <div id="pixModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="fecharModal()">&times;</span>
+            <h2>Pagamento via PIX</h2>
+            <p>Use o QR Code abaixo ou a chave PIX para pagamento</p>
+            <img src="./qrvane.jpeg" alt="QR Code PIX">
+            <p><small>leia o QR-CODE, ou copie a chave pix</small></p>
+            <input type="text" id="pixKey" value="00020126330014BR.GOV.BCB.PIX0111413509868105204000053039865802BR5924Vanessa Moreira da Silva6009SAO PAULO62140510rTCvA8tLM263044DDD" readonly>
+            <button onclick="copyPix()">Copiar chave PIX</button>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #777;">Após o pagamento, envie o comprovante para o WhatsApp</p>
+        </div>
+    </div>
+
+    <footer style="text-align: center; padding: 1rem; margin-top: 1rem;">
+        © 2025 • Vanessa Moreira
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ================= FUNÇÕES DO MODAL (GARANTIDAS) =================
+        function abrirModal() {
+            const modal = document.getElementById('pixModal');
+            if (modal) {
+                modal.style.display = 'block';
+                console.log("Modal aberto");
+            } else {
+                console.error("Modal não encontrado!");
+            }
+        }
+        
+        function fecharModal() {
+            const modal = document.getElementById('pixModal');
+            if (modal) modal.style.display = 'none';
+        }
+        
+        // ================= CONFIGURAÇÃO SUPABASE =================
+        // Substitua pelos dados do seu projeto Supabase
+        const SUPABASE_URL = "https://syyypnufmyiyellylpqb.supabase.co";        // <--- ATUALIZE AQUI
+        const SUPABASE_ANON_KEY = "sb_publishable_LPUpHw5cVFZ_D5kysEivjw_egY3Cc3z";                   // <--- ATUALIZE AQUI
+        let supabaseClient = null;
+
+        try {
+            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            console.log("Supabase inicializado");
+        } catch (e) {
+            console.warn("Supabase não configurado. Apenas o modal PIX funcionará.");
+            supabaseClient = null;
+        }
+        
+        // Variáveis de seleção
+        let horarioSelecionado = null;
+        let diaSelecionado = null;
+        let servicoSelecionado = null;
+        let precoSelecionado = null;
+        
+        // Carregar horários do Supabase e renderizar (somente se supabaseClient estiver configurado)
+        async function carregarHorarios() {
+            if (!supabaseClient) {
+                document.getElementById('horarios-dinamicos').innerHTML = '<p>⚠️ Banco de dados não configurado. Para usar a agenda, configure o Supabase.</p>';
+                return;
+            }
+            const { data, error } = await supabaseClient
+                .from('agenda')
+                .select('*')
+                .order('data', { ascending: true })
+                .order('horario', { ascending: true });
+            
+            if (error) {
+                console.error("Erro ao carregar horários:", error);
+                document.getElementById('horarios-dinamicos').innerHTML = '<p>Erro ao carregar agenda. Tente novamente mais tarde.</p>';
+                return;
+            }
+            
+            const grupos = {};
+            data.forEach(item => {
+                const key = `${item.dia}|${item.data}`;
+                if (!grupos[key]) {
+                    grupos[key] = {
+                        dia: item.dia,
+                        data: item.data,
+                        horarios: []
+                    };
+                }
+                grupos[key].horarios.push({
+                    horario: item.horario,
+                    disponivel: item.disponivel,
+                    id: item.id
+                });
+            });
+            
+            let html = '';
+            for (const key in grupos) {
+                const grupo = grupos[key];
+                html += `<div class="dia-grupo">
+                            <h4>${grupo.data} - ${grupo.dia}</h4>
+                            <div class="horarios-container">`;
+                grupo.horarios.forEach(h => {
+                    const classe = h.disponivel ? 'disponivel' : 'bloqueado';
+                    html += `<button class="hora-btn ${classe}" 
+                                    data-dia="${grupo.dia}"
+                                    data-data="${grupo.data}"
+                                    data-horario="${h.horario}"
+                                    data-id="${h.id}">
+                                ${h.horario.replace(':00', 'h')}
+                            </button>`;
+                });
+                html += `</div></div>`;
+            }
+            document.getElementById('horarios-dinamicos').innerHTML = html;
+            
+            document.querySelectorAll('.hora-btn.disponivel').forEach(btn => {
+                btn.addEventListener('click', () => selecionarHorario(btn));
+            });
+            document.querySelectorAll('.hora-btn.bloqueado').forEach(btn => {
+                btn.addEventListener('click', () => mostrarMsgHorarioIndisponivel());
+            });
+        }
+        
+        function mostrarMsgHorarioIndisponivel() {
+            const msg = document.getElementById("msg");
+            msg.textContent = "Este horário não está disponível para agendamento. Por favor, selecione outro horário.";
+            msg.className = "error";
+            msg.style.display = "block";
+            setTimeout(() => msg.style.display = "none", 3000);
+        }
+        
+        function selecionarHorario(botao) {
+            document.querySelectorAll('.hora-btn.selecionado').forEach(b => {
+                b.classList.remove('selecionado');
+                b.classList.add('disponivel');
+            });
+            botao.classList.remove('disponivel');
+            botao.classList.add('selecionado');
+            
+            diaSelecionado = botao.getAttribute('data-dia');
+            horarioSelecionado = botao.getAttribute('data-horario');
+            document.getElementById('selectedDay').value = diaSelecionado;
+            document.getElementById('selectedHour').value = horarioSelecionado;
+            atualizarInfoSelecao();
+        }
+        
+        function selecionarServico(botao) {
+            document.querySelectorAll('.servico-btn.selecionado').forEach(b => b.classList.remove('selecionado'));
+            botao.classList.add('selecionado');
+            servicoSelecionado = botao.getAttribute('data-servico');
+            precoSelecionado = botao.getAttribute('data-preco-pix');
+            document.getElementById('selectedService').value = servicoSelecionado;
+            document.getElementById('selectedPreco').value = precoSelecionado;
+            atualizarInfoSelecao();
+        }
+        
+        function atualizarInfoSelecao() {
+            const selectionInfo = document.getElementById('selectionInfo');
+            const selectedInfoText = document.getElementById('selectedInfoText');
+            let infoText = "";
+            if (diaSelecionado && horarioSelecionado) {
+                infoText += `${diaSelecionado} às ${horarioSelecionado}`;
+            }
+            if (servicoSelecionado && precoSelecionado) {
+                if (infoText) infoText += " | ";
+                infoText += `${servicoSelecionado} (${precoSelecionado})`;
+            }
+            if (infoText) {
+                selectedInfoText.textContent = infoText;
+                selectionInfo.style.display = 'block';
+                selectionInfo.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                selectionInfo.style.display = 'none';
+            }
+        }
+        
+        async function agendar() {
+            if (!supabaseClient) {
+                alert("Agendamento não disponível: Supabase não configurado.");
+                return;
+            }
+            const name = document.getElementById("name").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const msg = document.getElementById("msg");
+            
+            if (!name || !phone) {
+                msg.textContent = "Por favor, preencha seu nome e telefone.";
+                msg.className = "error";
+                msg.style.display = "block";
+                return;
+            }
+            if (!diaSelecionado || !horarioSelecionado) {
+                msg.textContent = "Por favor, selecione um horário disponível.";
+                msg.className = "error";
+                msg.style.display = "block";
+                return;
+            }
+            if (!servicoSelecionado || !precoSelecionado) {
+                msg.textContent = "Por favor, selecione um serviço.";
+                msg.className = "error";
+                msg.style.display = "block";
+                return;
+            }
+            
+            const phoneDigits = phone.replace(/\D/g, '');
+            if (phoneDigits.length < 10 || phoneDigits.length > 11) {
+                msg.textContent = "Por favor, insira um telefone válido com DDD (ex: 11999999999).";
+                msg.className = "error";
+                msg.style.display = "block";
+                return;
+            }
+            
+            const phoneFormatted = phoneDigits.length === 11 
+                ? `(${phoneDigits.substring(0,2)}) ${phoneDigits.substring(2,7)}-${phoneDigits.substring(7)}`
+                : `(${phoneDigits.substring(0,2)}) ${phoneDigits.substring(2,6)}-${phoneDigits.substring(6)}`;
+            
+            const message = `Olá Vanessa! Gostaria de agendar um horário:\n\n` +
+                          `*Nome:* ${name}\n` +
+                          `*Telefone:* ${phoneFormatted}\n` +
+                          `*Dia:* ${diaSelecionado}\n` +
+                          `*Horário:* ${horarioSelecionado}\n` +
+                          `*Serviço:* ${servicoSelecionado}\n` +
+                          `*Valor:* ${precoSelecionado}\n\n` +
+                          `Por favor, confirme a disponibilidade. Obrigada!`;
+            
+            const encodedMessage = encodeURIComponent(message);
+            const phoneNumber = "5511993909244";
+            window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+            
+            msg.textContent = "Abrindo WhatsApp para confirmar o agendamento...";
+            msg.className = "success";
+            msg.style.display = "block";
+            
+            const botaoSelecionado = document.querySelector('.hora-btn.selecionado');
+            if (botaoSelecionado) {
+                const id = botaoSelecionado.getAttribute('data-id');
+                if (id) {
+                    await supabaseClient.from('agenda').update({ disponivel: false }).eq('id', id);
+                }
+                botaoSelecionado.classList.remove('selecionado');
+                botaoSelecionado.classList.add('bloqueado');
+                botaoSelecionado.removeEventListener('click', selecionarHorario);
+                botaoSelecionado.addEventListener('click', mostrarMsgHorarioIndisponivel);
+            }
+            
+            setTimeout(() => {
+                document.getElementById("name").value = "";
+                document.getElementById("phone").value = "";
+                horarioSelecionado = null;
+                diaSelecionado = null;
+                servicoSelecionado = null;
+                precoSelecionado = null;
+                document.getElementById('selectionInfo').style.display = 'none';
+                document.getElementById('selectedDay').value = '';
+                document.getElementById('selectedHour').value = '';
+                document.getElementById('selectedService').value = '';
+                document.getElementById('selectedPreco').value = '';
+                msg.style.display = "none";
+            }, 4000);
+        }
+        
+        function copyPix() {
+            const pixKey = document.getElementById("pixKey");
+            if (!pixKey) return;
+            pixKey.select();
+            pixKey.setSelectionRange(0, 99999);
+            try {
+                navigator.clipboard.writeText(pixKey.value);
+                const pixButton = document.querySelector('.modal-content button');
+                if (pixButton) {
+                    const originalText = pixButton.textContent;
+                    pixButton.textContent = "Chave Copiada!";
+                    pixButton.style.backgroundColor = "#4CAF50";
+                    setTimeout(() => {
+                        pixButton.textContent = originalText;
+                        pixButton.style.background = "linear-gradient(to right, #d81b60, #f48fb1)";
+                    }, 2000);
+                }
+                const msg = document.getElementById("msg");
+                if (msg) {
+                    msg.textContent = "Chave PIX copiada para a área de transferência!";
+                    msg.className = "success";
+                    msg.style.display = "block";
+                    setTimeout(() => msg.style.display = "none", 3000);
+                }
+            } catch (err) {
+                alert("Não foi possível copiar a chave. Tente selecionar e copiar manualmente.");
+            }
+        }
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarHorarios();
+            document.querySelectorAll('.servico-btn').forEach(btn => {
+                btn.addEventListener('click', () => selecionarServico(btn));
+            });
+        });
+    </script>
+</body>
+</html>
