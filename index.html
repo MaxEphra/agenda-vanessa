@@ -8,14 +8,15 @@
     <!-- Meta tags para compartilhamento (Open Graph) -->
     <meta property="og:title" content="Vanessa Moreira - Manicure & Pedicure">
     <meta property="og:description" content="Agende seu horário para manicure e pedicure com Vanessa Moreira. Profissionalismo e beleza para suas mãos e pés.">
-    <meta property="og:image" content="./vane.jpeg">
+    <meta property="og:image" content="/agenda-vanessa/vane.jpeg">
     <meta property="og:image:width" content="800">
     <meta property="og:image:height" content="800">
-    <meta property="og:url" content="https://maxephra.github.io/agenda-vanessa">
+    <meta property="og:url" content="https://maxephra.github.io/agenda-vanessa/">
     <meta property="og:type" content="website">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* (mantenha o CSS igual ao que estava funcionando) */
         * {
             margin: 0;
             padding: 0;
@@ -533,7 +534,7 @@
         <h2>Nossos Serviços</h2>
         <table class="servicos-tabela">
             <thead>
-                <th>Serviço</th>
+                32<th>Serviço</th>
                     <th>PIX (à vista)</th>
                     <th>Cartão (acréscimo)</th>
                 </tr>
@@ -640,26 +641,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // ================= FUNÇÕES DO MODAL (GARANTIDAS) =================
+        // ================= FUNÇÕES DO MODAL =================
         function abrirModal() {
-            const modal = document.getElementById('pixModal');
-            if (modal) {
-                modal.style.display = 'block';
-                console.log("Modal aberto");
-            } else {
-                console.error("Modal não encontrado!");
-            }
+            document.getElementById('pixModal').style.display = 'block';
         }
-        
         function fecharModal() {
-            const modal = document.getElementById('pixModal');
-            if (modal) modal.style.display = 'none';
+            document.getElementById('pixModal').style.display = 'none';
         }
         
         // ================= CONFIGURAÇÃO SUPABASE =================
-        // Substitua pelos dados do seu projeto Supabase
-        const SUPABASE_URL = "https://syyypnufmyiyellylpqb.supabase.co";        // <--- ATUALIZE AQUI
-        const SUPABASE_ANON_KEY = "sb_publishable_LPUpHw5cVFZ_D5kysEivjw_egY3Cc3z";                   // <--- ATUALIZE AQUI
+        const SUPABASE_URL = "https://syyypnufmyiyellylpqb.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_LPUpHw5cVFZ_D5kysEivjw_egY3Cc3z";
         let supabaseClient = null;
 
         try {
@@ -676,7 +668,7 @@
         let servicoSelecionado = null;
         let precoSelecionado = null;
         
-        // Carregar horários do Supabase e renderizar (somente se supabaseClient estiver configurado)
+        // Carregar horários do Supabase
         async function carregarHorarios() {
             if (!supabaseClient) {
                 document.getElementById('horarios-dinamicos').innerHTML = '<p>⚠️ Banco de dados não configurado. Para usar a agenda, configure o Supabase.</p>';
@@ -694,15 +686,12 @@
                 return;
             }
             
+            // Agrupar
             const grupos = {};
             data.forEach(item => {
                 const key = `${item.dia}|${item.data}`;
                 if (!grupos[key]) {
-                    grupos[key] = {
-                        dia: item.dia,
-                        data: item.data,
-                        horarios: []
-                    };
+                    grupos[key] = { dia: item.dia, data: item.data, horarios: [] };
                 }
                 grupos[key].horarios.push({
                     horario: item.horario,
@@ -776,9 +765,7 @@
             const selectionInfo = document.getElementById('selectionInfo');
             const selectedInfoText = document.getElementById('selectedInfoText');
             let infoText = "";
-            if (diaSelecionado && horarioSelecionado) {
-                infoText += `${diaSelecionado} às ${horarioSelecionado}`;
-            }
+            if (diaSelecionado && horarioSelecionado) infoText += `${diaSelecionado} às ${horarioSelecionado}`;
             if (servicoSelecionado && precoSelecionado) {
                 if (infoText) infoText += " | ";
                 infoText += `${servicoSelecionado} (${precoSelecionado})`;
