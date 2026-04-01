@@ -16,7 +16,6 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* (mantenha o CSS igual ao que estava funcionando) */
         * {
             margin: 0;
             padding: 0;
@@ -44,7 +43,6 @@
             padding-bottom: 80px;
         }
 
-        /* Header com imagem circular */
         header {
             background: linear-gradient(to right, var(--rosa-escuro), var(--rosa-medio));
             color: white;
@@ -89,7 +87,6 @@
             opacity: 0.9;
         }
 
-        /* Cards */
         .card {
             background-color: var(--branco);
             border-radius: 16px;
@@ -109,7 +106,6 @@
             font-size: 1.8rem;
         }
 
-        /* Tabela de serviços */
         .servicos-tabela {
             width: 100%;
             border-collapse: collapse;
@@ -145,7 +141,6 @@
             font-size: 1.1rem;
         }
 
-        /* Formulário de agendamento */
         label {
             display: block;
             margin: 1rem 0 0.5rem;
@@ -187,7 +182,6 @@
             box-shadow: 0 5px 12px rgba(216, 27, 96, 0.3);
         }
 
-        /* Mensagem de confirmação */
         #msg {
             margin-top: 1.5rem;
             padding: 1rem;
@@ -209,7 +203,6 @@
             border: 1px solid #ef9a9a;
         }
 
-        /* Horários */
         .horario-info {
             background-color: var(--rosa-claro);
             padding: 1.5rem;
@@ -296,7 +289,6 @@
             box-shadow: 0 0 10px rgba(136, 14, 79, 0.5);
         }
 
-        /* Botões de serviço */
         .servicos-container {
             display: flex;
             flex-direction: column;
@@ -346,7 +338,6 @@
             color: white;
         }
 
-        /* Informação de seleção */
         .selection-info {
             background-color: #e3f2fd;
             padding: 1rem;
@@ -362,7 +353,19 @@
             color: #1976d2;
         }
 
-        /* Rodapé fixo estilo app */
+        .btn-clear {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            width: auto;
+            display: inline-block;
+        }
+
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -405,7 +408,6 @@
             transform: translateY(-2px);
         }
 
-        /* Modal PIX */
         .modal {
             display: none;
             position: fixed;
@@ -436,7 +438,7 @@
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
-            color: #aaa;
+            color: #000;
         }
         .close-modal:hover {
             color: var(--rosa-escuro);
@@ -464,7 +466,6 @@
             margin-top: 1rem;
         }
 
-        /* Responsividade */
         @media (max-width: 768px) {
             .profile-img {
                 width: 90px !important;
@@ -535,8 +536,8 @@
         <table class="servicos-tabela">
             <thead>
                 <th>Serviço</th>
-                    <th>PIX (à vista)</th>
-                    <th>Cartão (acréscimo)</th>
+                    <th>PIX </th>
+                    <th>CARTÃO </th>
                 </tr>
             </thead>
             <tbody>
@@ -549,13 +550,9 @@
         </table>
     </section>
 
-    <!-- Seção de Agendamento (dinâmica via Supabase) -->
+    <!-- Seção de Agendamento -->
     <section class="card">
         <h2>Agendamento</h2>
-        
-        <div class="selection-info" id="selectionInfo">
-            <p>Seleção atual: <span id="selectedInfoText">Nenhum horário e serviço selecionado</span></p>
-        </div>
         
         <input type="hidden" id="selectedDay" value="">
         <input type="hidden" id="selectedHour" value="">
@@ -566,34 +563,40 @@
             <h3>Selecione: DIA | HORÁRIO | SERVIÇO</h3>
             <div id="horarios-dinamicos"></div>
         </div>
-        
+
         <div style="margin-top: 2rem;">
             <h3 style="color: var(--rosa-escuro); margin-bottom: 1rem; text-align: center;">Escolha o Serviço</h3>
-            <div class="servicos-container">
+            <div class="servicos-container" id="servicos-container">
                 <button class="servico-btn" data-servico="Manicure Simples" data-preco-pix="R$ 35,00" data-preco-cartao="R$ 40,00">
-                    <span>Manicure Simples</span>
-                    <span class="servico-preco">R$ 35,00 / R$ 40,00</span>
+                    <span>Manicure Simples - (PIX)</span>
+                    <span class="servico-preco">R$ 35,00 </span>
                 </button>
                 <button class="servico-btn" data-servico="Manicure com Francesinha" data-preco-pix="R$ 40,00" data-preco-cartao="R$ 45,00">
-                    <span>Manicure com Francesinha</span>
-                    <span class="servico-preco">R$ 40,00 / R$ 45,00</span>
+                    <span>Manicure com Francesinha - (PIX)</span>
+                    <span class="servico-preco">R$ 40,00 </span>
                 </button>
                 <button class="servico-btn" data-servico="Pedicure Simples" data-preco-pix="R$ 40,00" data-preco-cartao="R$ 45,00">
-                    <span>Pedicure Simples</span>
-                    <span class="servico-preco">R$ 40,00 / R$ 45,00</span>
+                    <span>Pedicure Simples - (PIX)</span>
+                    <span class="servico-preco">R$ 40,00 </span>
                 </button>
                 <button class="servico-btn" data-servico="Pedicure com Francesinha" data-preco-pix="R$ 45,00" data-preco-cartao="R$ 50,00">
-                    <span>Pedicure com Francesinha</span>
-                    <span class="servico-preco">R$ 45,00 / R$ 50,00</span>
+                    <span>Pedicure com Francesinha - (PIX)</span>
+                    <span class="servico-preco">R$ 45,00 </span>
                 </button>
                 <button class="servico-btn" data-servico="Pacote Mão e Pé Simples" data-preco-pix="R$ 70,00" data-preco-cartao="R$ 75,00">
-                    <span>Pacote Mão e Pé Simples</span>
-                    <span class="servico-preco">R$ 70,00 / R$ 75,00</span>
+                    <span>Pacote Mão e Pé Simples - (PIX)</span>
+                    <span class="servico-preco">R$ 70,00 </span>
                 </button>
             </div>
         </div>
+
+        <!-- Informação da seleção (agora depois dos serviços) -->
+        <div class="selection-info" id="selectionInfo">
+            <p>Seleção atual: <span id="selectedInfoText">Nenhum horário e serviço selecionado</span></p>
+            <button class="btn-clear" onclick="limparTudo()">Limpar seleção</button>
+        </div>
         
-        <div style="margin-top: 2rem;">
+        <div style="margin-top: 2rem;" id="dados-container">
             <h3 style="color: var(--rosa-escuro); margin-bottom: 1rem; text-align: center;">Seus Dados</h3>
             <label for="name">Seu Nome</label>
             <input type="text" id="name" placeholder="Digite seu nome completo">
@@ -631,12 +634,12 @@
             <p><small>leia o QR-CODE, ou copie a chave pix</small></p>
             <input type="text" id="pixKey" value="00020126330014BR.GOV.BCB.PIX0111413509868105204000053039865802BR5924Vanessa Moreira da Silva6009SAO PAULO62140510rTCvA8tLM263044DDD" readonly>
             <button onclick="copyPix()">Copiar chave PIX</button>
-            <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #777;">Após o pagamento, envie o comprovante para o WhatsApp</p>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #d81b60;">Após o pagamento, envie o comprovante para o WhatsApp</p>
         </div>
     </div>
 
     <footer style="text-align: center; padding: 1rem; margin-top: 1rem;">
-        © 2025 • Vanessa Moreira
+        © 2026 • Vanessa Moreira 
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -668,6 +671,21 @@
         let servicoSelecionado = null;
         let precoSelecionado = null;
         
+        // Funções de rolagem suave
+        function scrollToServicos() {
+            const servicosContainer = document.getElementById('servicos-container');
+            if (servicosContainer) {
+                servicosContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+        
+        function scrollToDados() {
+            const dadosContainer = document.getElementById('dados-container');
+            if (dadosContainer) {
+                dadosContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+        
         // Carregar horários do Supabase
         async function carregarHorarios() {
             if (!supabaseClient) {
@@ -686,7 +704,6 @@
                 return;
             }
             
-            // Agrupar
             const grupos = {};
             data.forEach(item => {
                 const key = `${item.dia}|${item.data}`;
@@ -720,12 +737,46 @@
             }
             document.getElementById('horarios-dinamicos').innerHTML = html;
             
+            // Atribuir eventos de clique (alternar seleção/deseleção)
             document.querySelectorAll('.hora-btn.disponivel').forEach(btn => {
-                btn.addEventListener('click', () => selecionarHorario(btn));
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (btn.classList.contains('selecionado')) {
+                        limparHorario();
+                    } else {
+                        selecionarHorario(btn);
+                    }
+                });
             });
             document.querySelectorAll('.hora-btn.bloqueado').forEach(btn => {
                 btn.addEventListener('click', () => mostrarMsgHorarioIndisponivel());
             });
+        }
+        
+        function limparHorario() {
+            document.querySelectorAll('.hora-btn.selecionado').forEach(b => {
+                b.classList.remove('selecionado');
+                b.classList.add('disponivel');
+            });
+            horarioSelecionado = null;
+            diaSelecionado = null;
+            document.getElementById('selectedDay').value = '';
+            document.getElementById('selectedHour').value = '';
+            atualizarInfoSelecao();
+        }
+        
+        function limparServico() {
+            document.querySelectorAll('.servico-btn.selecionado').forEach(b => b.classList.remove('selecionado'));
+            servicoSelecionado = null;
+            precoSelecionado = null;
+            document.getElementById('selectedService').value = '';
+            document.getElementById('selectedPreco').value = '';
+            atualizarInfoSelecao();
+        }
+        
+        function limparTudo() {
+            limparHorario();
+            limparServico();
         }
         
         function mostrarMsgHorarioIndisponivel() {
@@ -737,6 +788,7 @@
         }
         
         function selecionarHorario(botao) {
+            // Remove seleção anterior
             document.querySelectorAll('.hora-btn.selecionado').forEach(b => {
                 b.classList.remove('selecionado');
                 b.classList.add('disponivel');
@@ -749,23 +801,41 @@
             document.getElementById('selectedDay').value = diaSelecionado;
             document.getElementById('selectedHour').value = horarioSelecionado;
             atualizarInfoSelecao();
+            
+            // Animar rolagem para a seção de serviços
+            scrollToServicos();
         }
         
         function selecionarServico(botao) {
-            document.querySelectorAll('.servico-btn.selecionado').forEach(b => b.classList.remove('selecionado'));
-            botao.classList.add('selecionado');
-            servicoSelecionado = botao.getAttribute('data-servico');
-            precoSelecionado = botao.getAttribute('data-preco-pix');
-            document.getElementById('selectedService').value = servicoSelecionado;
-            document.getElementById('selectedPreco').value = precoSelecionado;
+            if (botao.classList.contains('selecionado')) {
+                // Desmarcar
+                botao.classList.remove('selecionado');
+                servicoSelecionado = null;
+                precoSelecionado = null;
+            } else {
+                // Remove seleção anterior e marca este
+                document.querySelectorAll('.servico-btn.selecionado').forEach(b => b.classList.remove('selecionado'));
+                botao.classList.add('selecionado');
+                servicoSelecionado = botao.getAttribute('data-servico');
+                precoSelecionado = botao.getAttribute('data-preco-pix');
+            }
+            document.getElementById('selectedService').value = servicoSelecionado || '';
+            document.getElementById('selectedPreco').value = precoSelecionado || '';
             atualizarInfoSelecao();
+            
+            // Se um serviço foi selecionado (não desmarcado), rola para o formulário de dados
+            if (botao.classList.contains('selecionado')) {
+                scrollToDados();
+            }
         }
         
         function atualizarInfoSelecao() {
             const selectionInfo = document.getElementById('selectionInfo');
             const selectedInfoText = document.getElementById('selectedInfoText');
             let infoText = "";
-            if (diaSelecionado && horarioSelecionado) infoText += `${diaSelecionado} às ${horarioSelecionado}`;
+            if (diaSelecionado && horarioSelecionado) {
+                infoText += `${diaSelecionado} às ${horarioSelecionado}`;
+            }
             if (servicoSelecionado && precoSelecionado) {
                 if (infoText) infoText += " | ";
                 infoText += `${servicoSelecionado} (${precoSelecionado})`;
@@ -773,7 +843,6 @@
             if (infoText) {
                 selectedInfoText.textContent = infoText;
                 selectionInfo.style.display = 'block';
-                selectionInfo.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             } else {
                 selectionInfo.style.display = 'none';
             }
@@ -844,24 +913,17 @@
                 }
                 botaoSelecionado.classList.remove('selecionado');
                 botaoSelecionado.classList.add('bloqueado');
-                botaoSelecionado.removeEventListener('click', selecionarHorario);
-                botaoSelecionado.addEventListener('click', mostrarMsgHorarioIndisponivel);
+                // Remove evento de seleção e adiciona evento de bloqueado
+                const newBtn = botaoSelecionado.cloneNode(true);
+                botaoSelecionado.parentNode.replaceChild(newBtn, botaoSelecionado);
+                newBtn.addEventListener('click', () => mostrarMsgHorarioIndisponivel());
             }
             
-            setTimeout(() => {
-                document.getElementById("name").value = "";
-                document.getElementById("phone").value = "";
-                horarioSelecionado = null;
-                diaSelecionado = null;
-                servicoSelecionado = null;
-                precoSelecionado = null;
-                document.getElementById('selectionInfo').style.display = 'none';
-                document.getElementById('selectedDay').value = '';
-                document.getElementById('selectedHour').value = '';
-                document.getElementById('selectedService').value = '';
-                document.getElementById('selectedPreco').value = '';
-                msg.style.display = "none";
-            }, 4000);
+            // Limpar seleções após agendamento
+            limparTudo();
+            document.getElementById("name").value = "";
+            document.getElementById("phone").value = "";
+            msg.style.display = "none";
         }
         
         function copyPix() {
